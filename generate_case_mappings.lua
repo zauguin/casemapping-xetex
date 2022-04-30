@@ -12,6 +12,8 @@ local lowercase = mapping_tables.lowercase
 local cased = mapping_tables.cased
 local case_ignorable = mapping_tables.case_ignorable
 
+uppercase[0x00DF]['de-xeszett'] = { _ = { 0x1E9E } }
+
 for k,v in pairs(case_ignorable) do
   cased[k] = nil
 end
@@ -175,4 +177,6 @@ write_teckit('lower_aztr', lowercase, 'tr')
 -- write_teckit('upper_az', uppercase, 'az')
 -- write_teckit('lower_az', lowercase, 'az')
 write_greek_upper('upper_el', uppercase, false)
+
 write_greek_upper('upper_el-xiota', uppercase, true)
+write_teckit('upper_de-xeszett', uppercase, 'de-xeszett')
