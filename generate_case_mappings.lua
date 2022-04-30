@@ -132,6 +132,39 @@ function write_teckit(name, mapping, lang)
   file:close()
   assert(0 == os.spawn{'teckit_compile', name .. '.map'})
 end
+function write_greek_upper(name, mapping, alt_iota)
+  local new_mapping = {}
+  for k,v in next, mapping do new_mapping[k] = v end
+  new_mapping[0x0345] = nil
+
+  local file = assert(io.open(name .. '.map', 'w'))
+  write_header(file, name)
+  file:write('\z
+    LHSFlags(ExpectsNFD)\n\z
+    RHSFlags(GeneratesNFD)\n\z
+  \n')
+  write_pass(file, new_mapping, lang)
+  file:write('\n\z
+    pass(Unicode)\n\z
+    Class [greek] = ( U+0370..U+03FF U+1F00..U+1FFF U+2126 )\n\z
+    Class [vowels_gaining_dialytika] = (U+0399 U+03A5)\n\z
+    Class [vowels] = ( U+0391 U+0395 U+0397 U+0399 U+039F U+03A5 U+03A9 )\n\z
+    Class [other_diacritic] = ( U+0304 U+0306 U+0313 U+0314 U+0343 )\n\z
+    Class [accent] = ( U+0300 U+0301 U+0302 U+0303 U+0311 U+0342 )\n\z
+    Define ypogegrammeni U+0345\n\z
+    Define dialytika U+0308\n\z
+    \n\z
+    U+0397 [other_diacritic]* [accent] / # _ # > U+0397 U+0301\n\z
+    [accent] >\n\z
+    [other_diacritic] >\n\z
+    [vowels]=first [other_diacritic]* [accent] ([other_diacritic] | [accent])* [vowels_gaining_dialytika]=second ([other_diacritic] | [accent])* dialytika? > @first @second dialytika\n\z
+  ')
+  if not alt_iota then
+    file:write'ypogegrammeni > U+0399\n'
+  end
+  file:close()
+  assert(0 == os.spawn{'teckit_compile', name .. '.map'})
+end
 write_teckit('upper', uppercase)
 write_teckit('lower', lowercase)
 write_teckit('upper_lt', uppercase, 'lt')
@@ -141,3 +174,5 @@ write_teckit('upper_aztr', uppercase, 'tr')
 write_teckit('lower_aztr', lowercase, 'tr')
 -- write_teckit('upper_az', uppercase, 'az')
 -- write_teckit('lower_az', lowercase, 'az')
+write_greek_upper('upper_el', uppercase, false)
+write_greek_upper('upper_el-xiota', uppercase, true)
