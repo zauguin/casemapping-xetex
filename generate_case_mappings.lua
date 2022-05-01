@@ -12,8 +12,6 @@ local lowercase = mapping_tables.lowercase
 local cased = mapping_tables.cased
 local case_ignorable = mapping_tables.case_ignorable
 
-uppercase[0x00DF]['de-xeszett'] = { _ = { 0x1E9E } }
-
 for k,v in pairs(case_ignorable) do
   cased[k] = nil
 end
@@ -220,8 +218,10 @@ write_greek_upper('upper_el_tex-text', uppercase, false, true)
 -- write_greek_upper('lower_el_tex-text', uppercase, false, true)
 -- lower_el is the same as lower
 
--- The two variants only apply to uppercase mappings
-write_greek_upper('upper_el-xiota', uppercase, true)
-write_greek_upper('upper_el-xiota_tex-text', uppercase, true, true)
-write_teckit('upper_de-xeszett', uppercase, 'de-xeszett')
-write_teckit('upper_de-xeszett_tex-text', uppercase, 'de-xeszett', true)
+-- Our variants only apply to uppercase mappings
+write_greek_upper('upper_el-x-iota', uppercase, true)
+write_greek_upper('upper_el-x-iota_tex-text', uppercase, true, true)
+write_teckit('upper_de-x-eszett', uppercase, 'de-x-eszett')
+write_teckit('upper_de-x-eszett_tex-text', uppercase, 'de-x-eszett', true)
+write_teckit('upper_hy', uppercase, 'hy')
+write_teckit('upper_hy_tex-text', uppercase, 'hy', true)
