@@ -159,10 +159,11 @@ function write_pass_remove_greek_diacritics(file, alt_iota)
     Class [accent] = ( U+0300 U+0301 U+0302 U+0303 U+0311 U+0342 )\n\z
     Define ypogegrammeni U+0345\n\z
     Define dialytika U+0308\n\z
+    Define after_greek / [greek] ([accent] | [other_diacritic] | ypogegrammeni | dialytika)* _\n\z
     \n\z
     U+0397 [other_diacritic]* [accent] / # _ # > U+0397 U+0301\n\z
-    [accent] >\n\z
-    [other_diacritic] >\n\z
+    [accent] after_greek >\n\z
+    [other_diacritic] after_greek >\n\z
     [vowels]=first [other_diacritic]* [accent] ([other_diacritic] | [accent])* [vowels_gaining_dialytika]=second ([other_diacritic] | [accent])* dialytika? > @first @second dialytika\n\z
   ')
   if not alt_iota then
